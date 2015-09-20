@@ -3,9 +3,9 @@ var background
 	,	playerSpeed = 200
 	,	enemies
 	,	enemy
-	,	enemySpeed = 150
 	, bullets
 	, bullet
+	, infoText = {}
 	,	shotSpeed = 300
 	, shotTime = 0
 	, keys;
@@ -27,8 +27,6 @@ function create() {
 	bullets.enableBody = true;
 	bullets.physicsBodyType = Phaser.Physics.ARCADE;
 	bullets.createMultiple(30, 'bullet');
-	bullets.setAll('anchor.x', 0.5);
-	bullets.setAll('anchor.y', 0.5);
   bullets.setAll('outOfBoundsKill', true);
   bullets.setAll('checkWorldBounds', true);
 
@@ -36,7 +34,11 @@ function create() {
 
 	enemies = game.add.physicsGroup(Phaser.Physics.ARCADE, game.world, 'enemies');
 
-	createEnemies();
+ 	game.enemyGenerator = game.time.events.loop(Phaser.Timer.SECOND * 1.25, createEnemies, this);
+  game.enemyGenerator.timer.start();
+
+  infoText.currentScore = 0;
+  infoText.scoreText = game.add.text(10, 10, 'Score: ' + infoText.currentScore, { font: '34px Arial', fill: '#FFF'} );
 
 	keys = game.input.keyboard.createCursorKeys();
 	fireUp = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -44,8 +46,6 @@ function create() {
 
 function update() {
 	background.tilePosition.x -= 2;
-
-	game.physics.arcade.overlap(bullet, enemies, killEnemy, null, this);
 
   player.body.velocity.setTo(0, 0);
 
@@ -64,6 +64,8 @@ function update() {
 	if(fireUp.isDown) {
 		shot();
 	}
+
+	game.physics.arcade.overlap(bullets, enemies, killEnemy, null, this);
 
 }
 
@@ -87,13 +89,19 @@ function shot() {
 
 function createEnemies() {
 	var x = game.world.width
-		,	y = game.rnd.integerInRange(0, game.world.height);
+		,	y = game.rnd.integerInRange(50, game.world.height - 50);
 	enemy = enemies.create(x, y, 'enemies');
-	enemy.health = 3;
-	enemy.body.velocity.x = -enemySpeed;
+  enemy.anchor.setTo(0, 0.5);
+	enemy.health = 2;
+	enemy.body.velocity.x = game.rnd.integerInRange(-150, -200); ;
+	enemy.outOfBoundsKill;
 }
 
 function killEnemy(bullet, enemy) {
-	enemy.damage(1);
 	bullet.kill();
+	enemy.damage(1);
+	if (enemy.health === 0) {
+		infoText.currentScore += 100;
+		infoText.scoreText.text = 'Score: ' + infoText.currentScore;
+	}
 }
