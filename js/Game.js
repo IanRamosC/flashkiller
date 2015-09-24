@@ -13,7 +13,7 @@ var background
 var game = new Phaser.Game(800, 600, Phaser.AUTO, '', {preload: preload, create: create, update: update});
 
 function preload() {
-	game.load.image('background', 'https://raw.githubusercontent.com/photonstorm/phaser-examples/master/examples/assets/games/invaders/starfield.png');
+	game.load.image('background', 'assets/img/sky.png');
 	game.load.image('spaceship', 'assets/img/spaceship.png');
 	game.load.image('enemies', 'assets/img/enemies.png');
 	game.load.image('bullet', 'assets/img/bullet.png');
