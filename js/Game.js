@@ -66,6 +66,8 @@ function update() {
 	}
 
 	game.physics.arcade.overlap(bullets, enemies, killEnemy, null, this);
+	game.physics.arcade.overlap(player, enemies, hitPlayer, null, this);
+	infoText.scoreText.text = 'Score: ' + infoText.currentScore;
 
 }
 
@@ -102,6 +104,19 @@ function killEnemy(bullet, enemy) {
 	enemy.damage(1);
 	if (enemy.health === 0) {
 		infoText.currentScore += 100;
-		infoText.scoreText.text = 'Score: ' + infoText.currentScore;
 	}
+}
+
+function hitPlayer(player, enemy) {
+	player.destroy();
+	enemy.kill();
+	restart();
+}
+
+function restart() {
+  enemies.removeAll();
+  createEnemies();
+  createPlayer();
+
+	infoText.currentScore = 0;
 }
