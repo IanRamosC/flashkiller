@@ -8,7 +8,7 @@ var background
 	, infoText = {}
 	,	shotSpeed = 300
 	, shotTime = 0
-	, keys;
+	, Keys = {};
 
 var game = new Phaser.Game(800, 600, Phaser.AUTO, '', {preload: preload, create: create, update: update});
 
@@ -40,8 +40,8 @@ function create() {
   infoText.currentScore = 0;
   infoText.scoreText = game.add.text(10, 10, 'Score: ' + infoText.currentScore, { font: '34px Arial', fill: '#FFF'} );
 
-	keys = game.input.keyboard.createCursorKeys();
-	fireUp = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+	Keys.cursors = game.input.keyboard.createCursorKeys();
+	Keys.fireUp = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 }
 
 function update() {
@@ -49,19 +49,19 @@ function update() {
 
   player.body.velocity.setTo(0, 0);
 
-	if(keys.up.isDown) {
+	if(Keys.cursors.up.isDown) {
 		player.body.velocity.y = -playerSpeed;
 	}
-	if(keys.down.isDown) {
+	if(Keys.cursors.down.isDown) {
 		player.body.velocity.y = playerSpeed;
 	}
-	if(keys.right.isDown && player.body.x < 210) {
+	if(Keys.cursors.right.isDown && player.body.x < 210) {
 		player.body.velocity.x = +playerSpeed;
 	}
-	if(keys.left.isDown && player.body.x > 10) {
+	if(Keys.cursors.left.isDown && player.body.x > 10) {
 		player.body.velocity.x = -playerSpeed;
 	}
-	if(fireUp.isDown) {
+	if(Keys.fireUp.isDown) {
 		shot();
 	}
 
