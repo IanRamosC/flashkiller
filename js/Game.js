@@ -42,6 +42,8 @@ function create() {
 
 	Keys.cursors = game.input.keyboard.createCursorKeys();
 	Keys.fireUp = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+	Keys.pause = game.input.keyboard.addKey(Phaser.Keyboard.ESC);
+	Keys.pause.onDown.add(pauseGame, this);
 }
 
 function update() {
@@ -111,6 +113,10 @@ function hitPlayer(player, enemy) {
 	player.destroy();
 	enemy.kill();
 	restart();
+}
+
+function pauseGame() {
+	game.paused = !game.paused;
 }
 
 function restart() {
